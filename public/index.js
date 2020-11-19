@@ -63,7 +63,7 @@ myChart = new Chart(ctx, {
         datasets: [{
             label: "Total Over Time",
             fill: true,
-            backgroundColor: "#6666ff",
+            backgroundColor: "#FFFFFF",
             data
         }]
     }

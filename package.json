@@ -1,31 +1,31 @@
 {
-    "name": "budget-app",
+    "name": "progressivebudget",
     "version": "1.0.0",
     "description": "",
     "main": "server.js",
     "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js",
-    "lite-server": "lite-server"
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node server.js",
+        "lite-server": "lite-server"
     },
     "repository": {
-    "type": "git",
-    "url": "git+https://github.com/briangearty/budgetTracker"
+        "type": "git",
+        "url": "git+https://github.com/Jakealgor/Progresivebudget"
     },
     "author": "",
     "license": "ISC",
     "bugs": {
-    "url": "https://github.com/briangearty/budgetTracker"
+        "url": "https://github.com/Jakealgor/Progressivebudget"
     },
-    "homepage": "https://github.com/briangearty/budgetTracker",
+    "homepage": "https://github.com/Jakealgor/Progressivebudget",
     "dependencies": {
-    "compression": "^1.7.4",
-    "connect": "^3.6.6",
-    "connect-timeout": "^1.9.0",
-    "dotenv": "^8.2.0",
-    "express": "^4.17.1",
-    "lite-server": "^2.5.3",
-    "mongoose": "^5.10.11",
-    "morgan": "^1.9.1"
+        "compression": "^1.7.4",
+        "connect": "^3.6.6",
+        "connect-timeout": "^1.9.0",
+        "dotenv": "^8.2.0",
+        "express": "^4.17.1",
+        "lite-server": "^2.5.3",
+        "mongoose": "^5.10.11",
+        "morgan": "^1.9.1"
     }
 }
