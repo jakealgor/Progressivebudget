@@ -1,137 +1,149 @@
 let transactions = [];
 let myChart;
 
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/worker.js')
+      .then((reg) => {
+        console.log('Worker Imported', reg);
+      });
+  });
+}
+
 fetch("/api/transaction")
-.then(response => {
-    console.log("fetch response", response.json());
-})
-.then(data => {
-    console.log("fetch data", data)
+  .then(response => {
+    return response.json();
+  })
+  .then(data => {
+
     transactions = data;
+
     populateTotal();
     populateTable();
     populateChart();
-});
-
-function populateTable() {
-    let tbody = document.querySelector("#tbody");
-    tbody.innerHTML = "";
-    transactions.forEach(transaction => {
-        let tr = document.createElement("tr");
-        tr.innerHTML = `
-        <td>${transaction.name}</td>
-        <td>${transaction.value}</td>
-        `;
-        tbody.appendChild(tr);
-    });
-    }
+  });
 
 function populateTotal() {
-let total = transactions.reduce((total, t) => {
+  let total = transactions.reduce((total, t) => {
     return total + parseInt(t.value);
-}, 0);
-let totalEl = document.querySelector("#total");
-totalEl.textContent = total;
+  }, 0);
+
+  let totalEl = document.querySelector("#total");
+  totalEl.textContent = total;
+}
+
+function populateTable() {
+  let tbody = document.querySelector("#tbody");
+  tbody.innerHTML = "";
+
+  transactions.forEach(transaction => {
+    let tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${transaction.name}</td>
+      <td>${transaction.value}</td>
+    `;
+
+    tbody.appendChild(tr);
+  });
 }
 
 function populateChart() {
+  let reversed = transactions.slice().reverse();
+  let sum = 0;
 
-let reversed = transactions.slice().reverse();
-let sum = 0;
-
-let labels = reversed.map(t => {
+  let labels = reversed.map(t => {
     let date = new Date(t.date);
     return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
-});
+  });
 
-let data = reversed.map(t => {
+  let data = reversed.map(t => {
     sum += parseInt(t.value);
     return sum;
-});
+  });
 
-
-if (myChart) {
+  if (myChart) {
     myChart.destroy();
-}
+  }
 
-let ctx = document.getElementById("myChart").getContext("2d");
+  let ctx = document.getElementById("myChart").getContext("2d");
 
-myChart = new Chart(ctx, {
+  myChart = new Chart(ctx, {
     type: 'line',
-    data: {
+      data: {
         labels,
         datasets: [{
             label: "Total Over Time",
             fill: true,
-            backgroundColor: "#FFFFFF",
+            backgroundColor: "#6666ff",
             data
         }]
     }
-});
+  });
 }
 
-function sendTransaction(isAdding) {
-let nameEl = document.querySelector("#t-name");
-let amountEl = document.querySelector("#t-amount");
-let errorEl = document.querySelector(".form .error");
+function sendTrans(isAdding) {
+  let nameEl = document.querySelector("#t-name");
+  let amountEl = document.querySelector("#t-amount");
+  let errorEl = document.querySelector(".form .error");
 
-if (nameEl.value === "" || amountEl.value === "") {
+  if (nameEl.value === "" || amountEl.value === "") {
     errorEl.textContent = "Missing Information";
     return;
-}
-else {
+  }
+  else {
     errorEl.textContent = "";
-}
+  }
 
-let transaction = {
+  let transaction = {
     name: nameEl.value,
     value: amountEl.value,
     date: new Date().toISOString()
-};
+  };
 
-if (!isAdding) {
+  if (!isAdding) {
     transaction.value *= -1;
-}
+  }
 
-transactions.unshift(transaction);
+  transactions.unshift(transaction);
 
-populateChart();
-populateTable();
-populateTotal();
+  populateChart();
+  populateTable();
+  populateTotal();
 
-fetch("/api/transaction", {
+  fetch("/api/transaction", {
     method: "POST",
     body: JSON.stringify(transaction),
     headers: {
       Accept: "application/json, text/plain, */*",
-    "Content-Type": "application/json"
+      "Content-Type": "application/json"
     }
-})
-.then(response => {    
-    console.log("post respnse",response.json());
-})
-.then(data => {
+  })
+  .then(response => {    
+    return response.json();
+  })
+  .then(data => {
     if (data.errors) {
-    errorEl.textContent = "Missing Information";
+      errorEl.textContent = "Missing Information";
     }
     else {
-    
-    nameEl.value = "";
-    amountEl.value = "";
+      
+      nameEl.value = "";
+      amountEl.value = "";
     }
-})
-.catch(err => {
+  })
+  .catch(err => {
 
-    saveRecord(transaction);
+    save(transaction);
+
     nameEl.value = "";
     amountEl.value = "";
-});
+  });
 }
 
 document.querySelector("#add-btn").onclick = function() {
-sendTransaction(true);
+  sendTrans(true);
 };
 
 document.querySelector("#sub-btn").onclick = function() {
-sendTransaction(false);
+  sendTrans(false);
 };
