@@ -3,6 +3,16 @@ var logger = require("morgan");
 var mongoose = require("mongoose");
 var compression = require("compression");
 
+mongoose.connect(
+  process.env.MONGODB_URI || 'mongodb://localhost/budgetracker',
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false
+  }
+);
+
 var PORT = 3000;
 
 var app = express();
@@ -15,10 +25,6 @@ app.use(express.json());
 
 app.use(express.static("public"));
 
-mongoose.connect("mongodb://localhost/budget", {
-  useNewUrlParser: true,
-  useFindAndModify: false
-});
 
 app.use(require("./routes/api.js"));
 
