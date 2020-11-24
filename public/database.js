@@ -1,9 +1,9 @@
 var indexeddatabase =
     window.indexedDB ||
-    window.mozIndexedDB ||
-    window.webkitIndexedDB ||
     window.msIndexedDB ||
-    window.shimIndexedDB;
+    window.mozIndexedDB ||
+    window.shimIndexedDB ||
+    window.webkitIndexedDB;
 
 var database ;
 var request = indexedDB.open("budget", 1);
@@ -17,21 +17,21 @@ request.onsuccess = ({ target }) => {
 database = target.result;
 
 if (navigator.onLine) {
-    checkDatabase();
+    checkdatabase();
 }
 };
 
 function save(record) {
-var transaction = database.transaction(["pending"], "readwrite");
-var store = transaction.objectStore("pending");
+    var transaction = database.transaction(["pending"], "readwrite");
+    var store = transaction.objectStore("pending");
 
 store.add(record);
 }
 
-function checkDatabase() {
-var transaction = database.transaction(["pending"], "readwrite");
-var store = transaction.objectStore("pending");
-var getAll = store.getAll();
+function checkdatabase() {
+    var transaction = database.transaction(["pending"], "readwrite");
+    var store = transaction.objectStore("pending");
+    var getAll = store.getAll();
 
 getAll.onsuccess = function() {
     if (getAll.result.length > 0) {
@@ -39,13 +39,15 @@ getAll.onsuccess = function() {
         method: "POST",
         body: JSON.stringify(getAll.result),
         headers: {
-          Accept: "application/json, text/plain, */*",
-        "Content-Type": "application/json"
+            Accept: "application/json, text/plain, */*",
+            "Content-Type": "application/json"
         }
     })
+
     .then(response => {        
         return response.json();
     })
+
     .then(() => {
         var transaction = database.transaction(["pending"], "readwrite");
         var store = transaction.objectStore("pending");
@@ -55,4 +57,4 @@ getAll.onsuccess = function() {
 };
 }
 
-window.addEventListener("online", checkDatabase);
+window.addEventListener("online", checkdatabase);

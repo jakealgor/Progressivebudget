@@ -1,11 +1,11 @@
-const express = require("express");
-const logger = require("morgan");
-const mongoose = require("mongoose");
-const compression = require("compression");
+var express = require("express");
+var logger = require("morgan");
+var mongoose = require("mongoose");
+var compression = require("compression");
 
-const PORT = 3000;
+var PORT = 3000;
 
-const app = express();
+var app = express();
 
 app.use(logger("dev"));
 

@@ -35,7 +35,6 @@ if (event.request.url.includes("/api/")) {
         });
     }).catch(err => console.log(err))
     );
-
     return;
 }
 

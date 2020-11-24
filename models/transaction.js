@@ -1,8 +1,8 @@
-const mongoose = require("mongoose");
+var mongoose = require("mongoose");
 
-const Schema = mongoose.Schema;
+var Schema = mongoose.Schema;
 
-const transactionSchema = new Schema(
+var transactionSchema = new Schema(
   {
     name: {
       type: String,
@@ -20,6 +20,6 @@ const transactionSchema = new Schema(
   }
 );
 
-const Transaction = mongoose.model("Transaction", transactionSchema);
+var Transaction = mongoose.model("Transaction", transactionSchema);
 
 module.exports = Transaction;
